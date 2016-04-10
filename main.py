@@ -34,11 +34,14 @@ def getText():
     for category in yourCategories:
         print category
 
-    # Starting off with some major categories
-    categories = ["people", "places", "events", "animals"]
-
-    # And then some sub categories
-    people = ["Authors", "Leaders", "
+    # Starting with some sub categories
+    people = ["Authors", "Leaders", "Legends"]
+    places = ["Fantasy", "Continent", "Country", "City", "Monument"]
+    events = ["Battle", "Political", "Historical"]
+    animals = ["Mammal", "Bird", "Fish", "Insect"]
+    
+    # Now making a category for categories #MetaLife
+    categories = [people, places, events, animals]
 
 def main():
     print ("Hi and welcome to the command line interface!" )
