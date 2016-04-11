@@ -1,4 +1,5 @@
 import wikipedia
+import categoryScraper
 
 # ---------------------------------------------------------------- #
 # WIKIWRITER
@@ -21,27 +22,48 @@ def doesArticleExist(topic):
     for counter in range(maxcounter):
         print(foundTopics[counter])
 
+#Note that subheaders always begin with "="
+def getSectionHeaders(article):
+    headers = []
+    startIndex = 0
+    while startIndex != -1:
+        #Find Start
+        startIndex = article.find("==")
+        #Find end
+        subarticle = article[startIndex+2:]
+        endIndex = subarticle.find("==")
+        if ((startIndex > -1) and (endIndex > -1)):
+            if (startIndex != endIndex):
+                if (endIndex - startIndex < 100 and endIndex > startIndex):
+                    header = article[startIndex+2:startIndex+2+endIndex]
+                    header = header.strip(' \t\n\r')
+                    if header != "" and header != "\n" and header != "=":
+                        print (header)
+                        headers.append(header)
+        article = article[endIndex+2:]
+    return headers
+
+
 def getText():
-    # So ideally here we would have an online text editor that allows you to write the article in the cloud as well
-    # But for the sake of the argument we're going to assume you can copy and paste text into this
-
-    # Let's take some example text
+    commonHeaders = [] 
     yourArticle = wikipedia.page("New York")
-
+    articles = wikipedia.search("New York")
+    for i in articles:
+        article = wikipedia.page(i).content
+        headers = getSectionHeaders(article)
+        print headers
+        for x in headers:
+            if x not in commonHeaders:
+                commonHeaders.append(x)
+    for commonHeader in commonHeaders:
+        print commonHeader
+        
     # Figure out what kind of article this is
     # We can use the categories tag, if you've created it
     yourCategories = yourArticle.categories
     for category in yourCategories:
-        print category
-
-    # Starting with some sub categories
-    people = ["Authors", "Leaders", "Legends"]
-    places = ["Fantasy", "Continent", "Country", "City", "Monument"]
-    events = ["Battle", "Political", "Historical"]
-    animals = ["Mammal", "Bird", "Fish", "Insect"]
-    
-    # Now making a category for categories #MetaLife
-    categories = [people, places, events, animals]
+        #print category
+        break
 
 def main():
     print ("Hi and welcome to the command line interface!" )
