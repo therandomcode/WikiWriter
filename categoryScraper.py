@@ -1,15 +1,15 @@
+import wikipedia
+
 # ---------------------------------------------------- #
 # WikiWriter
+# Section Scrapers
 # By Kristina Wagner and Sharon Lin
 # Copyright April 2016
 # -----------------------------------------------------#
 
-import wikipedia
-
 #Note that subheaders always begin with "="
 def getSectionHeaders(article):
     headers = []
-    subheaders = [] 
     startIndex = 0
     while startIndex != -1:
         #Find Start
@@ -26,7 +26,7 @@ def getSectionHeaders(article):
                         print (header)
                         headers.append(header)
         article = article[endIndex+2:]
-
+    return headers
 
 article = wikipedia.page("Obama").content
 getSectionHeaders(article)
