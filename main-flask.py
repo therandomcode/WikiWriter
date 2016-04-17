@@ -9,25 +9,19 @@
 # Imports for Flask
 import webapp2
 import cgi
-#import MySQLdb
+import MySQLdb
 import os
 import jinja2
 import logging
 import json
 import urllib
 from google.appengine.ext.webapp.util import run_wsgi_app
-#from app import app
 
-#Imports for Python -- these must be installed in the lib folder
+#Imports for Python
 import wikipedia
 
 # Import the Flask Framework
 from flask import Flask
-from flask import render_template_string
-from flask_wtf import Form
-from wtforms import StringField
-from wtforms.validators import DataRequired 
-
 app = Flask(__name__)
 # Note: We don't need to call run() since our application is embedded within
 # the App Engine WSGI application server.
@@ -38,29 +32,33 @@ JINJA_ENVIRONMENT = jinja2.Environment(
   autoescape=True,
   extensions=['jinja2.ext.autoescape'])
 
-class WikiForm(Form):
-    key = StringField('Search Term', validators = [DataRequired()])
 
 @app.route('/')
-def index():
-    form = WikiForm() 
-    if form.validate_on_submit():
-        topics = wikipedia.search(form.key.data) or ['No topics found']
-        return render_template_string(index_html, topics = topics, form = form)
-    return render_template(index_html, topics = None, form = form)
+def hello():
+    """Return a friendly HTTP greeting."""
+    return 'Hello World!'
 
-    app.run(debug=True)
+def searchPressed(topic):
+	if doesArticleExist(topic) == -1:
+		#The article didn't exist. Do something
+	else:
+		sim_articles = foundTopics
+		return render_template("index.html")
 
-@app.route('/index')
 # First you want to find out if the article has been created
-def index():
-    topic = "cats"
+def doesArticleExist(topic):
     foundTopics = wikipedia.search(topic)
-    if (len(foundTopics) > 0):
-        print("This is being called")
-        return render_template('index.html', foundTopics = foundTopics)
-        #return foundTopics
-    return ["No topics were found! Your topic is new!"]
+    print("We found the following articles for " + topic)
+    if (len(foundTopics) > 10):
+        maxcounter = 10;
+    elif (len(foundTopics) != 0):
+        maxcounter = len(foundTopics)
+    else:
+        print ("No topics were found! Your topic is new!") 
+        return -1 
+    for counter in range(maxcounter):
+        print(foundTopics[counter])
+    return foundTopics
 
 #Note that subheaders always begin with "="
 def getSectionHeaders(article):

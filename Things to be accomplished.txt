@@ -1,0 +1,10 @@
+Things that need to be accomplished:
+
+- make text editor
+- get suggested structure 
+- get suggeste tags, categories, external links
+- provide sample paragraphs for each section 
+- make frontend
+- link frontend and backend
+- link to wikipedia
+- red page generator 
