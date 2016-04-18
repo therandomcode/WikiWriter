@@ -22,8 +22,7 @@ from google.appengine.ext.webapp.util import run_wsgi_app
 import wikipedia
 
 # Import the Flask Framework
-from flask import Flask
-from flask import render_template_string
+from flask import Flask, render_template_string, request, jsonify
 from flask_wtf import Form
 from wtforms import StringField
 from wtforms.validators import DataRequired 
@@ -46,6 +45,15 @@ class WikiForm(Form):
 
 @app.route('/')
 def index():
+    return render_template_string(index_html)
+
+@app.route('/topics')
+def topics():
+    key = request.args.get('key')
+    topics = wikipedia.search(key) or ['No topics found']
+    return jsonify(topics = topics)
+
+def index5():
     form = WikiForm() 
     if form.validate_on_submit():
         topics = wikipedia.search(form.key.data) or ['No topics found']

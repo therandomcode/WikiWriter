@@ -25,18 +25,39 @@
 		input[type='text'] { font-size: 24px; }
 		</style>
 	</head>
-		<!-- Header -->
-			<header id="header" class="skel-layers-fixed">
-				<h1><a href="#">WikiWriter</a></h1>
-				<nav id="nav">
-					<ul>
-						<li><a href="index.html">Home</a></li>
-						<li><a href="left-sidebar.html">Text Editer</a></li>
-						<li><a href="right-sidebar.html">Red Pages</a></li>
-						<li><a href="#" class="button special">Sign Up</a></li>
-					</ul>
-				</nav>
-			</header>
+<!--
+	<body>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script type="text/javascript">
+		function submit() {
+			$.getJSON({{ request.script_root|tojson|safe}} + '/topics', 
+				{ key: $('key').val() },
+				function(data) {
+					var ul = $('#result');
+					ul.empty();
+					$(data.topics).each(function(index, item) {
+						ul.append($('<li>', {text:item}));
+					});
+				})
+		}
+	</script>
+	Search Term: <input id="key" name = "key"/>
+	<input id = "submit" type = "button" value = "Go" onclick = "submit();" />
+	</body>
+
+	-->
+	<!-- Header -->
+		<header id="header" class="skel-layers-fixed">
+			<h1><a href="#">WikiWriter</a></h1>
+			<nav id="nav">
+				<ul>
+					<li><a href="index.html">Home</a></li>
+					<li><a href="left-sidebar.html">Text Editer</a></li>
+					<li><a href="right-sidebar.html">Red Pages</a></li>
+					<li><a href="#" class="button special">Sign Up</a></li>
+				</ul>
+			</nav>
+		</header>
 
 		<!-- Banner -->
 			<section id="banner">
