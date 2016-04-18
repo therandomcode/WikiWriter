@@ -29,8 +29,11 @@ from wtforms import StringField
 from wtforms.validators import DataRequired 
 
 app = Flask(__name__)
-# Note: We don't need to call run() since our application is embedded within
-# the App Engine WSGI application server.
+app.secret_key = 'secret'
+
+index_html = ""
+with open("templates/index.html") as myfile:
+    index_html = "".join(line.rstrip() for line in myfile)
 
 # Configure the Jinja2 environment.
 JINJA_ENVIRONMENT = jinja2.Environment(
@@ -47,13 +50,11 @@ def index():
     if form.validate_on_submit():
         topics = wikipedia.search(form.key.data) or ['No topics found']
         return render_template_string(index_html, topics = topics, form = form)
-    return render_template(index_html, topics = None, form = form)
-
-    app.run(debug=True)
+    return render_template_string(index_html, topics = None, form = form)
 
 @app.route('/index')
 # First you want to find out if the article has been created
-def index():
+def index2():
     topic = "cats"
     foundTopics = wikipedia.search(topic)
     if (len(foundTopics) > 0):

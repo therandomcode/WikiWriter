@@ -26,6 +26,8 @@ handlers:
 - url: /templates
   static_dir: templates
   application_readable: true
+- url: /images
+  static_dir: images
 
 # App Engine serves and caches static files contained in the listed directories
 # (and subdirectories). Uncomment and set the directory as needed.

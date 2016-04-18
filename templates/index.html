@@ -25,27 +25,6 @@
 		input[type='text'] { font-size: 24px; }
 		</style>
 	</head>
-	<body id="top">
-
-
-	<form> <!-- method = "POST"> -->
-		{{ form.csrf_token }}
-		{{ form.key.label }}: {{ form.key() }}
-		<input type="submit" value = "GO"/>
-	</form>
-	<hr />
-	{% if topics %}<ul>
-		{% for topic in topics % }<li>{% end for %}
-	<form>
-	  First name:<br>
-	  <input type="text" name="firstname"><br>
-	  Last name:<br>
-	  <input type="text" name="lastname">
-	</form>
-
-
-
-
 		<!-- Header -->
 			<header id="header" class="skel-layers-fixed">
 				<h1><a href="#">WikiWriter</a></h1>
@@ -67,11 +46,26 @@
 						<div id="focuses" style="opacity: 1;">
 						<div class="prompt" style="display: block;">
 						<h3>What would you like to write about?</h3>
-						<input type="text" style="text-align:center;"></div><ol></ol>
+
+						<form method = "POST">
+						{{ form.csrf_token }}
+						{{ form.key.label }} {{ form.key() }}
+						<ul></ul>
+						<input type="submit" class = "button big special" value = "Search"/>
+					</form>
+					<!--
 					<ul class="actions">
 						<li><a href="#content" class="button big special">Search</a></li>
 						<li><a href="#elements" class="button big alt" onclick="updateSimilar()">Generate Topic</a></li>
 					</ul>
+					-->
+					
+					{% if topics %}<ul>
+						{% for topic in topics %}
+							<li>{{ topic }}</li>
+						{% endfor %}
+					</ul>{% endif %}
+					</body>
 				</div>
 			</section>
 
