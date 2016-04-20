@@ -44,21 +44,24 @@ class WikiForm(Form):
     key = StringField('Search Term', validators = [DataRequired()])
 
 @app.route('/')
+#This is for the pure HTML version of this app 
 def index():
-    return render_template_string(index_html)
-
-@app.route('/topics')
-def topics():
-    key = request.args.get('key')
-    topics = wikipedia.search(key) or ['No topics found']
-    return jsonify(topics = topics)
-
-def index5():
     form = WikiForm() 
     if form.validate_on_submit():
         topics = wikipedia.search(form.key.data) or ['No topics found']
         return render_template_string(index_html, topics = topics, form = form)
     return render_template_string(index_html, topics = None, form = form)
+
+#This is for the version that uses Ajax
+def index4():
+    return render_template_string(index_html)
+
+@app.route('/topics', methods=['GET', 'POST'])
+def topics():
+    key = request.args.get('key')
+    topics = wikipedia.search(key) or ['No topics found']
+    return render_template_string(index_html, topics = topics, form = form)
+    #return jsonify(topics = topics)
 
 @app.route('/index')
 # First you want to find out if the article has been created

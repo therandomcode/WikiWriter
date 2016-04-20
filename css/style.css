@@ -1031,7 +1031,7 @@
 			}
 
 		#banner .button {
-			min-width: 12em;
+			min-width: 4em;
 		}
 
 		#banner h2 {
@@ -1084,7 +1084,9 @@
 				margin-bottom: 0;
 			}
 
-		# editor .textarea{
+		# editor 
+
+		#editor textarea{
 			-moz-appearance: none;
 			-webkit-appearance: none;
 			-o-appearance: none;
@@ -1097,7 +1099,7 @@
 			color: inherit;
 			display: block;
 			outline: 0;
-			padding: 0 1em;
+			padding: 0 0.5em;
 			text-decoration: none;
 			width: 100%;
 			font-size: 12px;
@@ -1125,7 +1127,7 @@
 			}
 
 		#editor .button {
-			min-width: 12em;
+			min-width: 4em;
 		}
 
 		#editor h2 {

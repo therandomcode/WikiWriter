@@ -68,18 +68,13 @@
 						<div class="prompt" style="display: block;">
 						<h3>What would you like to write about?</h3>
 
-						<form method = "POST">
+					<form action = '/topics' method = "POST">
 						{{ form.csrf_token }}
 						{{ form.key.label }} {{ form.key() }}
 						<ul></ul>
-						<input type="submit" class = "button big special" value = "Search"/>
+					<input type="submit" class = "button big alt" value = "Generate Topic"/>
+					<input type="submit" class = "button big special" value = "Search"/>
 					</form>
-					<!--
-					<ul class="actions">
-						<li><a href="#content" class="button big special">Search</a></li>
-						<li><a href="#elements" class="button big alt" onclick="updateSimilar()">Generate Topic</a></li>
-					</ul>
-					-->
 					
 					{% if topics %}<ul>
 						{% for topic in topics %}
@@ -96,13 +91,14 @@
 					<h2>Stats about your article</h2>
 					<p>We're trying to be helpful, I promise</p>
 				</header>
+
 				<div class="container">
 					<div class="row">
 						<div class="4u">
 							<section class="special box">
 								<i class="icon fa-area-chart major"></i>
 								<h3>Articles we found</h3>
-								<p>This would be an unordered list of articles wikipedia thinks are similar</p>
+								<p>This would be an unordered list of articles wikipedia thinks are similar PAJAMAS</p>
 								<li> {{foundTopics}} </li>
 							</section>
 						</div>
@@ -123,25 +119,41 @@
 					</div>
 				</div>
 			</section>
-			
+
 		<!-- Text Editor -->
-		<!--
-			<section id="editor">
+			<section id="editor" style="background-image:url(../images/pic04.jpg)">
 				<div class="inner">
 					<h2>Topic</h2>
 						<div id="center-below">
 						<div id="focuses" style="opacity: 1;">
 						<div class="prompt" style="display: block;">
 						<h3>Start writing!</h3>
-						<input type="textarea" rows = 12 cols = 8></div><ol></ol>
-					<ul class="actions">
-						<li><a href="#content" class="button small special">Spell Check</a></li>
-						<li><a href="#elements" class="button small alt">Submit</a></li>
+						<input type="text"  style="width: 100%; min-width: 200px; color: #111;"></div><ol></ol>
+					<ul class="actions" style="color:#111;">
+					 <!-- Text area -->
+						 <!-- User Control Buttons -->
+						<li><a href = "#content" class="button small alt"> Header</a></li>
+						<li><a href = "#content" class="button small alt">Subheader</a></li>
+						<li><a href = "#content" class="button small alt"><b>Bold</b></a></li>
+						<li><a href = "#content" class="button small alt"><i>Italic</i></a></li>
+						<li><a href = "#content" class="button small alt"><u>Underline</u></a></li>
+						<li><a href = "#content" class="button small alt">Link</a></li>
+						<li><a href = "#content" class="button small alt">Reference</a></li>
+						<br>
 					</ul>
+					<ul class="actions" style="color:#111;">
+					    <li><textarea class="text_edit" id="my_text" style="width:800px; min-width:500px; height:300px; color:#111; resize:none;"></textarea></li>
+					    <li><textarea class="text_edit" id="my_text" style="width:800px; min-width:500px; height:300px; color:#111; resize:none;"></textarea></li>
+					</ul>
+				    <li></li>
+				    <ul class = "actions">
+						<li><a href="#content" class="button big special">Spell Check</a></li>
+						<li><a href="#elements" class="button big alt">Submit</a></li>
+					</ul>
+					<!--<div id="view_text"></div>-->
 				</div>
 			</section>
-		-->
-
+		
 		<!-- Footer -->
 			<footer id="footer">
 				<div class="container">
