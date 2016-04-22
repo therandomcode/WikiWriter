@@ -1,10 +1,12 @@
 Things that need to be accomplished:
 
-- make text editor
-- get suggested structure 
+- get a sample article from Wikipedia 
+- add interaction  between the text editor and the controls
+
+- get suggested structure for the article topic being written 
 - get suggeste tags, categories, external links
 - provide sample paragraphs for each section 
-- make frontend
+
+- make frontend [x] 
 - link frontend and backend
-- link to wikipedia
-- red page generator 
+- topic generator[x] 

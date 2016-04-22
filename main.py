@@ -16,6 +16,10 @@ import logging
 import json
 import urllib
 import ssl
+import requests
+import socket
+import httplib
+
 from google.appengine.ext.webapp.util import run_wsgi_app
 #from app import app
 
@@ -47,10 +51,11 @@ def index():
 
 @app.route('/topics')
 def topics():
+    print("look, we made it to here!")
     key = request.args.get('key')
-    topics = wikipedia.page(key).title or ['No topic found']
-    #topics = wikipedia.search(key) or ['No topic found']
-    print(topics)
+    print(key)
+    topics = wikipedia.search("bananas") or ['No topic found']
+    #print(topics) 
     return jsonify(topics=topics)
 
 @app.errorhandler(404)
