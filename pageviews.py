@@ -19,23 +19,31 @@ def getlinks(url):
                 for a in links:
                         listA.append(a.get('href'))[6:]
         return listA
- 
+
+#get 1000 random articles and save to file
+def saveaslist(list):
+        titlelist = []
+        for i in range(1000):
+                index = random.randint(0,(len(list)-1))
+                titlelist.append(list[index])
+        with open("listofarticles.txt", 'w') as f:
+                f.write(titlelist)
+        return titlelist
 
 
 #get 1000 hundred random articles
 def randomarticlestotxt(list):
-	for i in range(1000):
-                index = random.randint(0,(len(list)-1))
+	for i in list:
 		try:
-			f = open(list[index]+".txt","w")
-			f.write(wikipedia.page(title=list[index], auto_suggest=True).content.encode('utf8'))
+			f = open(i+".txt","w")
+			f.write(wikipedia.page(title=i, auto_suggest=True).content.encode('utf8'))
 		except wikipedia.exceptions.DisambiguationError:
-			print "multiple articles for " + list[index]
+			print "multiple articles for " + i
 			os.remove(list[index]+".txt")
 		except IOError:
-			print "encoding error for " + list[index]
+			print "encoding error for " + i
 		except wikipedia.exceptions.PageError:
-			print "page not found for " + list[index]
+			print "page not found for " + i
 			os.remove(list[index]+".txt")
 		else:
 			f.close()
@@ -63,7 +71,7 @@ def dataforcsv(list):
 				pageviews_total = 'None'
 				revisions_total = 'None'
 				#revisions_total = 1
-			else:
+			'''else:
 				for j in range(len(pageviews)):
 					pageviews_total = pageviews_total+pageviews[j]['views']
 				PPR = pageviews_total/revisions_total
@@ -85,7 +93,7 @@ def dataforcsv(list):
 				except SyntaxError:
 					print "non ascii character"
 				except IOError:
-					print j, "weird utf-8 problem"
+					print j, "weird utf-8 problem"'''
 rand = wikipedia.random(pages=60)
 randomarticlestotxt(rand)
 getpageviewstocsv(rand)
