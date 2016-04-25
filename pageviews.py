@@ -4,33 +4,47 @@ import wikipedia
 import os
 import csv
 import shutil
+import BeautifulSoup
+import urllib
+import random
 
-goodarticles = https://en.wikipedia.org/w/api.php?action=query&titles=Wikipedia:Good_articles/all&prop=links&pllimit=max
+#get list of articles from page
+def getlinks(url):
+        listA = []
+        URL = urllib.urlopen(url).read()
+        soup = BeautifulSoup(URL)
+        data = soup.find_all('div',{'class': 'NavFrame'})
+        for div in data:
+                links = div.find_all('a')
+                for a in links:
+                        listA.append(a.get('href'))[6:]
+        return listA
+ 
 
 
-#get five hundred random articles
+#get 1000 hundred random articles
 def randomarticlestotxt(list):
-	for i in list:
-		print i
+	for i in range(1000):
+                index = random.randint(0,(len(list)-1))
 		try:
-			f = open(i+".txt","w")
-			f.write(wikipedia.page(title=i, auto_suggest=True).content.encode('utf8'))
+			f = open(list[index]+".txt","w")
+			f.write(wikipedia.page(title=list[index], auto_suggest=True).content.encode('utf8'))
 		except wikipedia.exceptions.DisambiguationError:
-			print "multiple articles for " + i
-			os.remove(i+".txt")
+			print "multiple articles for " + list[index]
+			os.remove(list[index]+".txt")
 		except IOError:
-			print "encoding error for " + i
+			print "encoding error for " + list[index]
 		except wikipedia.exceptions.PageError:
-			print "page not found for " + i
-			os.remove(i+".txt")
+			print "page not found for " + list[index]
+			os.remove(list[index]+".txt")
 		else:
 			f.close()
 
 
 #tabulate number of views for list of 500 random articles and put into csv
-def getpageviewstocsv(list):
+def dataforcsv(list):
 	with open("PagesViews.csv", 'wb') as csvfile:
-		fieldnames = ['Article Name', 'User Visits', 'Revisions', 'PPR']
+		fieldnames = ['Article Name', 'User Visits', 'Revisions', 'PPR','Number of Images','Number of Words']
 		writer = csv.DictWriter(csvfile,fieldnames=fieldnames)
 		writer.writeheader()
 		for i in list:
