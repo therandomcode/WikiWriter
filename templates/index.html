@@ -26,7 +26,6 @@
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js">
 	</script>
 	<script type=text/javascript>
-	console.log("We made it to the javascript area function!"); 
 	function submit() {
 	    $.getJSON({{ request.script_root|tojson|safe }} + '/topics',
 	      { key: $('#key').val() },
@@ -34,7 +33,22 @@
 	        var ul = $('#result');
 	        ul.empty();
 	        $(data.topics).each(function(index, item) {
-	          ul.append($('<li>',{text:item}));});});}
+	          ul.append($('<li>',{text:item}));});});
+
+	    $.getJSON({{ request.script_root|tojson|safe }} + '/images',
+	      { key: $('#key').val() },
+	      function(data) {
+	        var ul = $('#imagesresult');
+	        ul.empty();
+	        $(data.images).each(function(index, item) {
+	        	if (index < 2){
+	        		var img = new Image();
+			    	ul.append($(img));
+			    	img.src=data.images[index];
+	        	}
+	    	
+			});});
+	}
 
 	function generateRandom() {
 		console.log("We made it to generateRandom!"); 
@@ -94,7 +108,7 @@
 					<section class="special box">
 						<i class="icon fa-area-chart major"></i>
 						<h3>Articles we found</h3>
-						<hr /><ul id="result"></ul>
+						<ul id="result"></ul>
 					</section>
 				</div>
 				<div class="4u">
@@ -107,8 +121,8 @@
 				<div class="4u">
 					<section class="special box">
 						<i class="icon fa-cog major"></i>
-						<h3>Here are some pictures</h3>
-						<p>Because good articles need pictures! We did the Google search for you.</p>
+						<h3>Pictures</h3>
+						<ul id="imagesresult"></ul>
 					</section>
 				</div>
 			</div>

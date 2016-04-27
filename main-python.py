@@ -1,4 +1,5 @@
 import wikipedia
+import nltk
 
 # ---------------------------------------------------------------- #
 # WIKIWRITER
