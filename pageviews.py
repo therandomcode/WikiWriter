@@ -4,9 +4,10 @@ import wikipedia
 import os
 import csv
 import shutil
-import BeautifulSoup
+from bs4 import BeautifulSoup
 import urllib
 import random
+from textblob import TextBlob
 
 #get list of articles from page
 def getlinks(url):
@@ -31,7 +32,7 @@ def saveaslist(list):
         return titlelist
 
 
-#get 1000 hundred random articles
+#turn articles to txt
 def randomarticlestotxt(list):
 	for i in list:
 		try:
@@ -48,52 +49,69 @@ def randomarticlestotxt(list):
 		else:
 			f.close()
 
+#get all the revisions for an article
+def getrevisions(item):
+	revisionsjson = requests.get("https://en.wikipedia.org/w/api.php?action=query&format=json&prop=revisions&list=&titles="+item+"&rvlimit=500&rvstart=2015-07-07T00%3A00%3A00.000Z&rvdir=newer").json()
+	revisionsindex = '\n'.join(revisionsjson['query']['pages'].keys()).encode('utf-8')
+	revisions = revisionsjson['query']['pages'][revisionsindex]['revisions']
+	revisions_total = len(revisions)
+	return revisions_total
+#get all the pageviews for an article
+def getpageviews(item):
+	pageviews_total = 0
+	pageviews = requests.get("https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/"+item+"/daily/20150701/20160410").json()
+	pageviews = pageviews['items']
+	for j in range(len(pageviews)):
+		pageviews_total = pageviews_total+pageviews[j]['views']
+	return pageviews_total
+
+#tabulate a bunch of data from the wikipedia page
+def getwikidata(item):
+	img_total = 0
+	sec_total = 0
+	ref_total = 0
+	string = ''
+	page = urllib.urlopen("https://en.wikipedia.org/wiki/"+item).read()
+	soup = BeautifulSoup(page)
+	dataimg = soup.find_all('a',{'class':'image'})
+	datacontents = soup.find_all('div', {'class':'toc'})
+	datawords = soup.find_all('p')
+	datarefs = soup.find_all('ol', {'class':'references'})
+	for i in datarefs:
+		li = i.find_all('li')
+		for i in li:
+			ref_total +=1
+	for j in datawords:
+		string += j.text
+	for k in datacontents:
+		li = k.find_all('li', {'class':'toclevel-1'})
+		for l in li:
+			sec_total+=1
+	for m in dataimg:
+		img = m.find_all('img')
+		for n in img:
+			img_total+=1
+	blob = TextBlob(string)
+	numwords = len(blob.words)
+	numsentences = len(blob.sentences)
+	return(img_total,sec_total,ref_total,numwords,numsentences)
 
 #tabulate number of views for list of 500 random articles and put into csv
 def dataforcsv(list):
 	with open("PagesViews.csv", 'wb') as csvfile:
-		fieldnames = ['Article Name', 'User Visits', 'Revisions', 'PPR','Number of Images','Number of Words']
+		fieldnames = ['Article Name', 'User Visits', 'Revisions', 'PPR','Number of Images', 'Number of Sections', 'Number of Sentences','Number of Words','Number of References']
 		writer = csv.DictWriter(csvfile,fieldnames=fieldnames)
 		writer.writeheader()
 		for i in list:
 			print i
-			pageviews_total = 0
-			revisions_total = 0
-			pageviews = requests.get("https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/"+i+"/daily/20150701/20160410").json()
-			revisions = requests.get("https://en.wikipedia.org/w/api.php?action=query&format=json&prop=revisions&list=&titles="+i+"&rvlimit=500&rvstart=2015-07-07T00%3A00%3A00.000Z&rvdir=newer").json()
-			revisionsindex = '\n'.join(revisions['query']['pages'].keys()).encode('utf-8')
-			try:
-				revisions = revisions['query']['pages'][revisionsindex]['revisions']
-				pageviews = pageviews['items']
-				revisions_total = len(revisions)
-			except KeyError:
-				#pageviews = pageviews['items']
-				pageviews_total = 'None'
-				revisions_total = 'None'
-				#revisions_total = 1
-			'''else:
-				for j in range(len(pageviews)):
-					pageviews_total = pageviews_total+pageviews[j]['views']
-				PPR = pageviews_total/revisions_total
-				writer.writerow({'Article Name': i.encode('utf8'), 'User Visits': pageviews_total, 'Revisions': revisions_total, 'PPR': PPR})
-				if PPR >= 7000:
-					bin = '7000+'
-				elif 2500<=PPR < 7000:
-					bin = '2500-7000'
-				elif 1000<=PPR < 2500:
-					bin = '1000-2500'
-				elif 500<=PPR < 1000:
-					bin = '500-1000'
-				elif PPR<500:
-					bin = '0-500'
-				else:
-					print "error PPR not a number"
-				try:
-					shutil.move("/Users/superstah/documents/05-839/WikiWriter/"+i+".txt","/Users/superstah/documents/05-839/WikiWriter/"+bin+"/"+i+".txt")
-				except SyntaxError:
-					print "non ascii character"
-				except IOError:
-					print j, "weird utf-8 problem"'''
-rand = wikipedia.random(pages=60)
-randomarticlestotxt(rand)
-getpageviewstocsv(rand)
+			pv = getpageviews(i)
+			print pv
+			rev = getrevisions(i)
+			print rev
+			data = getwikidata(i)
+			print data
+			writer.writerow({'Article Name': i.encode('utf8'), 'User Visits': pv, 'Revisions': rev, 'PPR': pv/rev, 'Number of Images':data[0], 'Number of Sections': data[1], 'Number of Sentences': data[4],'Number of Words': data[3],'Number of References': data[2]})
+		print "done"
+				
+
+dataforcsv(['Barack_Obama','Cell_theory'])
