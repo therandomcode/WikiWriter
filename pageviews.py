@@ -40,7 +40,7 @@ def getlinks(link):
 	URL = urllib.urlopen(link).read()
 	soup = BeautifulSoup(URL)
     #for finding good articles
-    #data = soup.find_all('div',{'class': 'NavFrame'})
+	#data = soup.find_all('div',{'class': 'NavContent'})
     #for finding featured articles
 	data = soup.find_all('td',style="padding:1em 1em 1em 1em; border:1px solid #A3BFB1; background-color:#F1F6FB")
 	for div in data:
@@ -52,11 +52,11 @@ def getlinks(link):
 
 #get 1000 random articles and save to file
 def saveaslist(list):
-	print list
 	titlelist = []
 	with open("listofarticles.txt", 'w') as f:
-		for i in range(1000):
+		for i in range(len(list)):
 			index = random.randint(0,(len(list)-1))
+			#index = i
 			print list[index]
 			if '/' in list[index]:
 				article = urllib.quote(list[index],safe='')
@@ -107,6 +107,7 @@ def getpageviews(item):
 		pageviews = pageviewsjson['items']
 	except KeyError:
 		pageviews_total = "Not Available"
+		return pageviews_total
 	else:
 		for j in range(len(pageviews)):
 			pageviews_total = pageviews_total+pageviews[j]['views']
@@ -124,6 +125,9 @@ def getwikidata(item):
 	datacontents = soup.find_all('div', {'class':'toc'})
 	datawords = soup.find_all('p')
 	datarefs = soup.find_all('ol', {'class':'references'})
+	text = requests.get("https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles="+item+"&redirects=1").json()
+	textindex = '\n'.join(text['query']['pages'].keys()).encode('utf-8')
+	paragraph = text['query']['pages'][textindex]['extract'].encode('utf-8')
 	for i in datarefs:
 		li = i.find_all('li')
 		for i in li:
@@ -137,27 +141,31 @@ def getwikidata(item):
 	blob = TextBlob(string)
 	numwords = len(blob.words)
 	numsentences = len(blob.sentences)
-	return(img_total,sec_total,ref_total,numwords,numsentences)
+	subjectivity = blob.sentiment.subjectivity
+	polarity = blob.sentiment.polarity
+	return(img_total,sec_total,ref_total,numwords,numsentences,subjectivity,polarity,paragraph)
 
 #tabulate number of views for list of 500 random articles and put into csv
 def dataforcsv(list):
 	with open("PagesViews.csv", 'wb') as csvfile:
-		fieldnames = ['Bin','Article Name','Number of Images', 'Number of Sections', 'Number of Sentences','Number of Words','Number of References']
+		fieldnames = ['Bin','Article Name','Number of Images', 'Number of Sections', 'Number of Sentences','Number of Words','Number of References','Subjectivity','Polarity','Paragraph','PagesViews','Revisions']
 		writer = csv.DictWriter(csvfile,fieldnames=fieldnames)
 		writer.writeheader()
 		for i in list:
 			print i
-			#pv = getpageviews(i)
+			pv = getpageviews(i)
 			#print pv
-			#rev = getrevisions(i)
+			rev = getrevisions(i)
 			#print rev
 			data = getwikidata(i)
 			print data
-			writer.writerow({'Bin': 'Good', 'Article Name': i.encode('utf8'), 'Number of Images':data[0], 'Number of Sections': data[1], 'Number of Sentences': data[4],'Number of Words': data[3],'Number of References': data[2]})
+			writer.writerow({'Bin': 'Regular', 'Article Name': i.encode('utf8'), 'Number of Images':data[0], 'Number of Sections': data[1], 'Number of Sentences': data[4],'Number of Words': data[3],'Number of References': data[2],'Subjectivity': data[5],'Polarity':data[6], 'Paragraph': data[7],'PagesViews':pv,'Revisions':rev})
 		print "done"
 				
-#links = getlinks("https://en.wikipedia.org/wiki/Wikipedia:Featured_articles")
-#links = getregarticles()
-#links2 = saveaslist(links)
-#dataforcsv(links2)
-print getregarticles()
+linksC = getlinks("https://en.wikipedia.org/wiki/Wikipedia:Featured_articles")
+#linksA = getlinks("https://en.wikipedia.org/wiki/Wikipedia:Good_articles/all")
+#linksB1 = getregarticles()
+#linksB2 = getregarticles()
+#linksB3 = linksB1+linksB2
+linkslist = saveaslist(linksC)
+dataforcsv(linkslist)
