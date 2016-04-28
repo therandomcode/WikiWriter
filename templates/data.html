@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript" src="d3.min.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Visualization</title>
+  <style>
+body {
+	background: black;
+}
+circle {
+	fill: rgba(255,255,255,0.8);
+}
+
+.axis text{
+	font-family: "Helvetica";
+	font-size: 8pt;
+	fill: rgba(255,255,255,0.8);
+}
+
+.axis .label {
+	font-size: 12pt;
+
+}
+
+.axis path, .axis line {
+	fill: rgba(255,255,255,0.8);
+	stroke: rgba(255,255,255,0.8);
+}
+
+div.tooltip {
+	position: absolute;
+	text-align: center;
+	width: auto;
+	min-width: 50px;
+	max-width: 500px;
+	height: 28px;
+	padding: 2px;
+	font: 12px sans-serif;
+	background: white;
+	border: 0px;
+	border-radius: 8px;
+	pointer-events: none;
+}
+</style>
+</head>
+<body>
+
+<script type="text/javascript">
+
+var outerWidth = 1000;
+var outerHeight = 500;
+
+var margin = {left:100, top:100, right:100, bottom:100};
+
+var innerWidth = outerWidth-margin.left-margin.right;
+var innerHeight = outerHeight-margin.top-margin.bottom;
+var rmin = 0;
+var rmax = 10;
+var xColumn = "PagesViews";
+var yColumn = "Revisions";
+var rColumn = "Polarity";
+var namecolumn = "Article_Name";
+
+var xaxislabeltext = "PageViews (log(views))";
+var xaxislabeloffset=50;
+
+var yaxislabeltext = "Revisions (log(revisions))";
+var yaxislabeloffset=50;
+
+
+
+
+var svg = d3.select("body").append("svg")
+	.attr("width",outerWidth)
+	.attr("height",outerHeight);
+var g = svg.append("g")
+	.attr("transform", "translate("+margin.left+","+margin.top+")");
+
+var xaxisg = g.append("g")
+	.attr("class","x axis")
+	.attr("transform","translate(0,"+innerHeight+")");
+var xaxislabel = xaxisg.append("text")
+	.style("text-anchor","middle")
+	.attr("x", innerWidth/2)
+	.attr("y", xaxislabeloffset)
+	.attr("class", "label")
+	.text(xaxislabeltext);
+var yaxisg = g.append("g")
+	.attr("class","y axis");
+var yaxislabel = yaxisg.append("text")
+	.style("text-anchor", "middle")
+	.attr("transform", "translate(-"+yaxislabeloffset+","+(innerHeight/2)+") rotate(-90)")
+	.attr("class","label")
+	.text(yaxislabeltext);
+
+
+var xScale = d3.scale.log().range([0,innerWidth]);
+var yScale = d3.scale.log().range([innerHeight,0]);
+var rScale = d3.scale.linear().range([rmin,rmax]);
+
+var xaxis = d3.svg.axis().scale(xScale).orient("bottom")
+	.ticks(5)
+	.tickFormat(d3.format("s"))
+	.outerTickSize(0);
+var yaxis = d3.svg.axis().scale(yScale).orient("left")
+	.ticks(5)
+	.tickFormat(d3.format("s"))
+	.outerTickSize(0);
+var mouseoverfunction = function(){
+	var circle = d3.select(this);
+	circle.transition().duration(500)
+	.attr("r",circle.attr("r")*1+5)
+}
+
+var div = d3.select("body").append("div")
+	.attr("class","tooltip")
+	.style("opacity",0);
+
+function render(data){
+
+	xScale.domain(d3.extent(data, function(d){return d[xColumn];}));
+	console.log(xScale.domain());
+	yScale.domain(d3.extent(data, function(d){return d[yColumn];}));
+	console.log(yScale.domain());
+	rScale.domain(d3.extent(data, function(d){return d[rColumn];}));
+	console.log(rScale.domain());
+
+	xaxisg.call(xaxis);
+	yaxisg.call(yaxis);
+
+	//enter
+	var circles = g.selectAll("circle").data(data);
+	circles.enter().append("circle");
+
+	//update
+	circles
+	.attr("r", function(d){return rScale(d[rColumn]);})
+	.attr("cx",function(d){return xScale(d[xColumn]);})
+	.attr("cy",function(d){return yScale(d[yColumn]);})
+	.on("mouseover", function(d){
+		div.transition()
+			.duration(200)
+			.style("opacity",.9);
+		div.html(d.Article_Name+"<br/>" + d.PagesViews)
+			.style("left", (d3.event.pageX)+"px")
+			.style("top", (d3.event.pageY-28)+"px");
+	})
+	.on("mouseout", function(d){
+		div.transition()
+		.duration(500)
+		.style("opacity",0);
+
+	});
+
+	//exit
+	circles.exit().remove();
+
+}
+
+
+
+function type(d){
+	d.Article_Name = d.Article_Name
+	d.Polarity = +d.Polarity;
+	d.PagesViews = +d.PagesViews;
+	d.Revisions = +d.Revisions;
+	return d;
+}
+
+d3.csv("pol-on-pv.csv",type, render);
+
+</script>
+</body>
+</html>
