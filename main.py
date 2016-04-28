@@ -38,6 +38,10 @@ index_html=''
 with open("templates/index.html") as myfile:
     index_html = "".join(line.rstrip() for line in myfile)
 
+about_html=''
+with open("templates/about.html") as myfile:
+    about_html = "".join(line.rstrip() for line in myfile)
+
 @app.route('/')
 def index():
     return render_template_string(index_html)
@@ -126,6 +130,11 @@ def featuresaverages():
                 pageviews_total = pageviews_total+pageviews[j]['views']
         pageviews_average = pageviews_total/len(topics)*1.0 
     return jsonify(featuresaverages = pageviews_total)
+
+
+@app.route('/about')
+def about():
+    return render_template_string(about_html)
 
 @app.errorhandler(404)
 def page_not_found(e):

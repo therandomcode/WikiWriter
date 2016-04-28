@@ -1,0 +1,132 @@
+<!DOCTYPE HTML>
+<!--
+	Ion by TEMPLATED
+	templated.co @templatedco
+	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+-->
+<html>
+<head>
+	<title>About</title>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<meta name="description" content="" />
+	<meta name="keywords" content="" />
+	<!--[if lte IE 8]><script src="js/html5shiv.js"></script><![endif]-->
+	<script src="js/jquery.min.js"></script>
+	<script src="js/skel.min.js"></script>
+	<script src="js/skel-layers.min.js"></script>
+	<script src="js/init.js"></script>
+	<noscript>
+		<link rel="stylesheet" href="css/skel.css" />
+		<link rel="stylesheet" href="css/style.css" />
+		<link rel="stylesheet" href="css/style-xlarge.css" />
+	</noscript>
+</head>
+<body>
+	<!-- Javascript -->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js">
+	</script>
+
+
+	<!-- Header -->
+	<header id="header" class="skel-layers-fixed">
+		<h1><a href="#">What makes a good article?</a></h1>
+		<nav id="nav">
+			<ul>
+				<li><a href="index.html">Write an article</a></li>
+				<li><a href="about">About the data</a></li>
+				<li><a href="#" class="button special">Write</a></li>
+			</ul>
+		</nav>
+	</header>
+
+<!--Banner-->
+<section id="banner">
+	<div class="inner">
+		<h2>Wikipedia Writer</h2>
+			<div id="center-below">
+			<div id="focuses" style="opacity: 1;">
+			<div class="prompt" style="display: block;">
+		
+			<h3>We used Machine Learning to figure it out</h3>
+		</div>
+</section>
+<!-- One -->
+	<section id="one" class="wrapper style1">
+		<header class="major">
+			<h2>Here's how we determined article quality:</h2>
+			<ol>
+				<li>Number of Images: if an article had more images, it is much more likely to be a featured article. </li>
+				<li>Number of References: the more references, the more likely the article is to be a featured article. </li>
+				<li> Length of the article, both by word and paragraph: In both cases, length is indicative of quality. </li>
+				<li>Number of subheadings: This is indicitative of quality of organization, and consequently indicated a good article. </li>
+				<li>Polarity, or how opposing different points of view in the same article were: Low polarity indicated a high quality article. </li>
+				<li>Subjectivity: Objectivity is prized in Encylopaedias, and consequently high subjectivity is a marker of a poor article. </li>
+			</ol>
+			<ol></ol>	
+			<h2>Average stats for each category</h2>
+				<table class="tg">
+				  <tr>
+				    <th class="tg-baqh">Article Quality</th>
+				    <th class="tg-baqh">num. images</th>
+				    <th class="tg-baqh">num. sections</th>
+				    <th class="tg-baqh">num. sentences</th>
+				    <th class="tg-baqh">num. words</th>
+				    <th class="tg-baqh">num. references</th>
+				  </tr>
+				  <tr>
+				    <td class="tg-baqh">Highest</td>
+				    <td class="tg-baqh">11.8</td>
+				    <td class="tg-baqh">8.7</td>
+				    <td class="tg-baqh">190</td>
+				    <td class="tg-baqh">4760</td>
+				    <td class="tg-baqh">92</td>
+				  </tr>
+				  <tr>
+				    <td class="tg-baqh">Medium</td>
+				    <td class="tg-baqh">7</td>
+				    <td class="tg-baqh">7</td>
+				    <td class="tg-baqh">108</td>
+				    <td class="tg-baqh">2600</td>
+				    <td class="tg-baqh">50</td>
+				  </tr>
+				  <tr>
+				    <td class="tg-baqh">Low</td>
+				    <td class="tg-baqh">2.5</td>
+				    <td class="tg-baqh">2.4</td>
+				    <td class="tg-baqh">14</td>
+				    <td class="tg-baqh">335</td>
+				    <td class="tg-baqh">53</td>
+				  </tr>
+				</table>
+				<ol></ol>
+				<h2>Where did we get our data?</h2>
+				<p> All our data was scraped from Wikipedia itself. Wikipedia has a pre-existing classification system for its articles, which we used to train other articles. There were some problems with this -- for example, only one person had to flag any article as any given category, so article quality is subject to bias. </p>
+
+				<h2>Goals for this project</h2>
+				<p> We wanted to accomplish three goals: 
+				<ol>
+					<li>Guide the user through the steps of creating a Wikipedia article, by providing a good narrative to follow</li>
+					<li>Improve Wikipedia, by:
+						<ul>
+							<li> Encouraging the creation of articles with similar structures. The coherence makes it easier to browse many articles, and it makes it easier for people like us to process the data. The latter is simply a nice side effect of the former. </li>
+							<li> Filling in red pages. We use a topic generator to pull the titles of pages which have been referenced in other articles or requested by other users, but have not yet been written. We hope that by drawing attention to these articles, they will get written. </li>
+							<li> Identify and supplement lean articles, or articles that are not up to the quality of a "Feature" article. Feature articles are selected by the staff as excellent examples. </li>
+						</ul>
+					<li>Look at expansions of similar ideas along the same framework. This project relies entirely on having good and bad data. What if instead of Wikipedia articles we were able to process essays, or novels? We could tell publishers what books were likely to become successful. We could advice school children on how to revise their essays, once writtern. Wikipedia has been a great case study because there is so much pre-classified data, both good and bad, that we have access to. </li>
+				</ol> 
+		</header>
+	</section>
+		
+<!-- Footer -->
+	<footer id="footer">
+		<div class="container">
+			<ul class="copyright">
+				<li>&copy; Untitled. All rights reserved.</li>
+				<li>Design: <a href="http://templated.co">TEMPLATED</a></li>
+				<li>Images: <a href="http://unsplash.com">Unsplash</a></li>
+			</ul>
+		</div>
+	</footer>
+
+</body>
+</html>
