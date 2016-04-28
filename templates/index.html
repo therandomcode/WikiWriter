@@ -48,6 +48,14 @@
 	        	}
 	    	
 			});});
+
+	    $.getJSON({{ request.script_root|tojson|safe }} + '/featuresaverages',
+	      { key: $('#key').val() },
+	      function(data) {
+	        var ul = $('#featuresaverages');
+	        ul.empty();
+	        $(data.featuresaverages).each(function(index, item) {
+	          ul.append($('<li>',{text:item}));});});
 	}
 
 	function generateRandom() {
@@ -114,8 +122,10 @@
 				<div class="4u">
 					<section class="special box">
 						<i class="icon fa-refresh major"></i>
-						<h3>Who would visit this page?</h3>
-						<p>Maybe this page is visited uniquely by people over 40 with pink hair. Who knows.</p>
+						<h3>How popular would this article become?</h3>
+						<p>For example, Barack Obama's Wikipedia page has 29 097 views every day! Butter gets just over 1000 pageviews a day, and the Blue Throated Piping Guan gets just 5 pageviews every day. </p>
+						The average article on similar subjects get
+						<ul id="featuresaverages"> </ul>
 					</section>
 				</div>
 				<div class="4u">
