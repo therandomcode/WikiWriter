@@ -109,11 +109,6 @@ var yaxis = d3.svg.axis().scale(yScale).orient("left")
 	.ticks(5)
 	.tickFormat(d3.format("s"))
 	.outerTickSize(0);
-var mouseoverfunction = function(){
-	var circle = d3.select(this);
-	circle.transition().duration(500)
-	.attr("r",circle.attr("r")*1+5)
-}
 
 var div = d3.select("body").append("div")
 	.attr("class","tooltip")
